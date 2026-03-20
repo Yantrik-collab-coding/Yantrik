@@ -1,4 +1,5 @@
 import os
+import json
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,15 +11,23 @@ from routers.friends import router as friends_router
 from routers.hackathon import router as hackathon_router
 from core.database import init_db
 
-app = FastAPI(title="Hive API", version="1.0.0")
+app = FastAPI(title="Yantrik API", version="1.0.0")
 
 # ── Firebase Admin SDK ────────────────────────────────────────────────────────
 try:
     import firebase_admin
     from firebase_admin import credentials as fb_creds
     if not firebase_admin._apps:
+        # Option 1: JSON string in env var (Render / Railway / any cloud)
+        cred_json = os.getenv("FIREBASE_CREDENTIALS_JSON", "")
+        # Option 2: Path to credentials file (local dev)
         cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH", "")
-        if cred_path and os.path.exists(cred_path):
+
+        if cred_json:
+            cred_dict = json.loads(cred_json)
+            firebase_admin.initialize_app(fb_creds.Certificate(cred_dict))
+            print("Firebase initialized from FIREBASE_CREDENTIALS_JSON env var")
+        elif cred_path and os.path.exists(cred_path):
             firebase_admin.initialize_app(fb_creds.Certificate(cred_path))
             print("Firebase initialized from credentials file")
         elif os.getenv("FIREBASE_PROJECT_ID"):
@@ -28,6 +37,8 @@ try:
             print("Firebase not configured - Google Sign-In disabled")
 except ImportError:
     print("firebase-admin not installed - Google Sign-In disabled")
+except Exception as e:
+    print(f"Firebase initialization failed: {e} - Google Sign-In disabled")
 
 # ── Rate limiting ─────────────────────────────────────────────────────────────
 try:
@@ -63,11 +74,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.on_event("startup")
 async def startup():
     await init_db()
-    # Warn loudly if default secrets are in use
-    import os as _os
-    if _os.getenv("JWT_SECRET", "hive-secret-change-in-prod") == "hive-secret-change-in-prod":
+    if os.getenv("JWT_SECRET", "hive-secret-change-in-prod") == "hive-secret-change-in-prod":
         print("⚠️  WARNING: JWT_SECRET is using the default value. Set a strong secret in .env before deploying!")
-    if _os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please") == "hive-default-change-in-prod-please":
+    if os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please") == "hive-default-change-in-prod-please":
         print("⚠️  WARNING: ENCRYPTION_SECRET is using the default value. User API keys are not properly secured!")
 
 app.include_router(auth.router,         prefix="/auth",       tags=["auth"])
