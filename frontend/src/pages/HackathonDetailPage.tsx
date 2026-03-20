@@ -17,6 +17,7 @@ interface Hackathon {
 interface TeamOverview {
   team_id: string; team_name: string; leader_name: string; leader_color: string
   recent_messages: any[]; files: any[]
+  project_id?: string
 }
 
 export default function HackathonDetailPage() {
