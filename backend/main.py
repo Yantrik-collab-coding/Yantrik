@@ -1,6 +1,6 @@
 import os
 import json
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -94,22 +94,19 @@ async def health():
 # ── Serve React frontend (must be LAST) ───────────────────────────────────────
 DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 
+API_PREFIXES = ("auth", "projects", "chat", "billing", "forum", "friends", "hackathons", "health", "docs", "openapi")
+
 if os.path.exists(DIST_DIR):
-    assets_dir = os.path.join(DIST_DIR, "assets")
-    if os.path.exists(assets_dir):
-        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
 
     @app.get("/{full_path:path}")
-    async def serve_frontend(request: Request, full_path: str):
-        # Don't intercept API or WebSocket routes
-        if full_path.startswith(("auth", "projects", "chat", "billing", 
-                                  "forum", "friends", "hackathons", "health")):
+    async def serve_frontend(full_path: str):
+        # Never intercept real API routes
+        if full_path.startswith(API_PREFIXES):
+            from fastapi import HTTPException
             raise HTTPException(status_code=404, detail="Not found")
-        index = os.path.join(DIST_DIR, "index.html")
-        if os.path.exists(index):
-            return FileResponse(index)
-        raise HTTPException(status_code=404, detail="Frontend not built")
-    
+        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+
     print(f"Serving frontend from {DIST_DIR}")
 else:
     print("Frontend dist not found - API only mode")
