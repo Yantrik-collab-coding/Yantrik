@@ -1,6 +1,6 @@
 import os
 import json
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -95,11 +95,20 @@ async def health():
 DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 
 if os.path.exists(DIST_DIR):
-    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
+    assets_dir = os.path.join(DIST_DIR, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
 
     @app.get("/{full_path:path}")
-    async def serve_frontend(full_path: str):
-        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+    async def serve_frontend(request: Request, full_path: str):
+        # Don't intercept API or WebSocket routes
+        if full_path.startswith(("auth", "projects", "chat", "billing", 
+                                  "forum", "friends", "hackathons", "health")):
+            raise HTTPException(status_code=404, detail="Not found")
+        index = os.path.join(DIST_DIR, "index.html")
+        if os.path.exists(index):
+            return FileResponse(index)
+        raise HTTPException(status_code=404, detail="Frontend not built")
     
     print(f"Serving frontend from {DIST_DIR}")
 else:
