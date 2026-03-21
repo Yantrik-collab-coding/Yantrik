@@ -2,7 +2,8 @@ import os
 import json
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 from routers import auth, projects, chat
 from routers.files import router as files_router
 from routers.billing import router as billing_router
@@ -18,11 +19,8 @@ try:
     import firebase_admin
     from firebase_admin import credentials as fb_creds
     if not firebase_admin._apps:
-        # Option 1: JSON string in env var (Render / Railway / any cloud)
         cred_json = os.getenv("FIREBASE_CREDENTIALS_JSON", "")
-        # Option 2: Path to credentials file (local dev)
         cred_path = os.getenv("FIREBASE_CREDENTIALS_PATH", "")
-
         if cred_json:
             cred_dict = json.loads(cred_json)
             firebase_admin.initialize_app(fb_creds.Certificate(cred_dict))
@@ -75,10 +73,11 @@ async def global_exception_handler(request: Request, exc: Exception):
 async def startup():
     await init_db()
     if os.getenv("JWT_SECRET", "hive-secret-change-in-prod") == "hive-secret-change-in-prod":
-        print("⚠️  WARNING: JWT_SECRET is using the default value. Set a strong secret in .env before deploying!")
+        print("⚠️  WARNING: JWT_SECRET is using the default value.")
     if os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please") == "hive-default-change-in-prod-please":
-        print("⚠️  WARNING: ENCRYPTION_SECRET is using the default value. User API keys are not properly secured!")
+        print("⚠️  WARNING: ENCRYPTION_SECRET is using the default value.")
 
+# ── API Routers ───────────────────────────────────────────────────────────────
 app.include_router(auth.router,         prefix="/auth",       tags=["auth"])
 app.include_router(projects.router,     prefix="/projects",   tags=["projects"])
 app.include_router(chat.router,         prefix="/chat",       tags=["chat"])
@@ -91,3 +90,17 @@ app.include_router(hackathon_router,    prefix="/hackathons", tags=["hackathons"
 @app.get("/health")
 async def health():
     return {"status": "ok", "version": "1.0.0"}
+
+# ── Serve React frontend (must be LAST) ───────────────────────────────────────
+DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
+
+if os.path.exists(DIST_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        return FileResponse(os.path.join(DIST_DIR, "index.html"))
+    
+    print(f"Serving frontend from {DIST_DIR}")
+else:
+    print("Frontend dist not found - API only mode")
