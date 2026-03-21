@@ -77,32 +77,30 @@ async def startup():
     if os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please") == "hive-default-change-in-prod-please":
         print("⚠️  WARNING: ENCRYPTION_SECRET is using the default value.")
 
-# ── API Routers ───────────────────────────────────────────────────────────────
-app.include_router(auth.router,         prefix="/auth",       tags=["auth"])
-app.include_router(projects.router,     prefix="/projects",   tags=["projects"])
-app.include_router(chat.router,         prefix="/chat",       tags=["chat"])
-app.include_router(files_router,        prefix="/projects",   tags=["files"])
-app.include_router(billing_router,      prefix="/billing",    tags=["billing"])
-app.include_router(forum_router,        prefix="/forum",      tags=["forum"])
-app.include_router(friends_router,      prefix="/friends",    tags=["friends"])
-app.include_router(hackathon_router,    prefix="/hackathons", tags=["hackathons"])
+# ── API Routers (all under /api prefix to match frontend) ────────────────────
+app.include_router(auth.router,         prefix="/api/auth",       tags=["auth"])
+app.include_router(projects.router,     prefix="/api/projects",   tags=["projects"])
+app.include_router(chat.router,         prefix="/api/chat",       tags=["chat"])
+app.include_router(files_router,        prefix="/api/projects",   tags=["files"])
+app.include_router(billing_router,      prefix="/api/billing",    tags=["billing"])
+app.include_router(forum_router,        prefix="/api/forum",      tags=["forum"])
+app.include_router(friends_router,      prefix="/api/friends",    tags=["friends"])
+app.include_router(hackathon_router,    prefix="/api/hackathons", tags=["hackathons"])
 
-@app.get("/health")
+@app.get("/api/health")
 async def health():
     return {"status": "ok", "version": "1.0.0"}
 
 # ── Serve React frontend (must be LAST) ───────────────────────────────────────
 DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "frontend", "dist")
 
-API_PREFIXES = ("auth", "projects", "chat", "billing", "forum", "friends", "hackathons", "health", "docs", "openapi")
-
 if os.path.exists(DIST_DIR):
     app.mount("/assets", StaticFiles(directory=os.path.join(DIST_DIR, "assets")), name="assets")
 
     @app.get("/{full_path:path}")
     async def serve_frontend(full_path: str):
-        # Never intercept real API routes
-        if full_path.startswith(API_PREFIXES):
+        # Never intercept API routes
+        if full_path.startswith("api/"):
             from fastapi import HTTPException
             raise HTTPException(status_code=404, detail="Not found")
         return FileResponse(os.path.join(DIST_DIR, "index.html"))

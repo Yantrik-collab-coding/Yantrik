@@ -52,7 +52,7 @@ export default function PublicProjectPage() {
   useEffect(() => {
     if (!isMember || !token || !id) return
     const ws = new WebSocket(
-      `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/${id}?token=${token}`
+      `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/api/chat/ws/${id}?token=${token}`
     )
     wsRef.current = ws
     ws.onopen  = () => setConnected(true)

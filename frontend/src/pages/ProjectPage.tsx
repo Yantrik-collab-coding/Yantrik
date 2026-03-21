@@ -183,7 +183,7 @@ export default function ProjectPage() {
   // ── WebSocket ──────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!id || !token) return
-    const wsUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws/${id}?token=${token}`
+    const wsUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/api/chat/ws/${id}?token=${token}`
     const ws    = new WebSocket(wsUrl)
     wsRef.current = ws
     ws.onopen  = () => setConnected(true)
