@@ -82,9 +82,7 @@ export default function AuthPage() {
       <nav style={S.nav} className="auth-nav">
         <div style={S.navLogo}>
           <div style={S.navLogoIcon}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
+            <img src="/logo.png" width="22" height="22" style={{ objectFit: 'cover', borderRadius: 4 }} alt="Yantrik" />
           </div>
           <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: '-0.03em' }}>Yantrik</span>
         </div>
@@ -104,9 +102,7 @@ export default function AuthPage() {
           {/* Logo */}
           <div style={S.logoWrap}>
             <div style={S.logoIcon}>
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/logo.png" width="44" height="44" style={{ objectFit: 'cover', borderRadius: 10 }} alt="Yantrik" />
             </div>
             <div>
               <div style={S.logoName} className="auth-logo-name">Yantrik</div>
@@ -289,9 +285,9 @@ const S: Record<string, React.CSSProperties> = {
   },
   navLogo: { display: 'flex', alignItems: 'center', gap: 9 },
   navLogoIcon: {
-    width: 32, height: 32, borderRadius: 9, background: 'var(--teal)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: 32, height: 32, borderRadius: 9, overflow: 'hidden',
     boxShadow: '0 0 14px var(--teal-glow)',
+    flexShrink: 0,
   },
   navBtn: {
     background: 'none', border: 'none', color: 'var(--text-muted)',
@@ -309,10 +305,10 @@ const S: Record<string, React.CSSProperties> = {
   hero: { flex: 1, display: 'flex', flexDirection: 'column', gap: 28, paddingTop: 60 },
   logoWrap: { display: 'flex', alignItems: 'center', gap: 16 },
   logoIcon: {
-    width: 64, height: 64, borderRadius: 18, background: 'var(--teal)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: 64, height: 64, borderRadius: 18, overflow: 'hidden',
     boxShadow: '0 0 30px var(--teal-glow), 0 0 60px var(--teal-dim)',
     animation: 'float 4s ease-in-out infinite',
+    flexShrink: 0,
   },
   logoName: { fontSize: 32, fontWeight: 900, letterSpacing: '-0.04em' },
   logoTagline: { fontSize: 13, color: 'var(--text-muted)', marginTop: 2 },

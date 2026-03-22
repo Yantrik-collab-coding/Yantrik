@@ -100,9 +100,7 @@ export default function Dashboard() {
         <div style={S.stripLogo} onClick={() => navigate('/')}
           onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderRadius='50%'}
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderRadius='12px'}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
+          <img src="/logo.png" width="22" height="22" style={{ objectFit: 'cover', borderRadius: 5 }} alt="Yantrik" />
         </div>
         <div style={S.stripDivider}/>
 
@@ -150,9 +148,7 @@ export default function Dashboard() {
         <div style={S.brand}>
           <div style={{display:'flex',alignItems:'center',gap:9}}>
             <div style={S.brandIcon}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="var(--teal)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/logo.png" width="18" height="18" style={{ objectFit: 'cover', borderRadius: 4 }} alt="Yantrik" />
             </div>
             <div>
               <div style={{fontWeight:800,fontSize:15,letterSpacing:'-0.03em'}}>Yantrik</div>
@@ -261,9 +257,7 @@ export default function Dashboard() {
         {projects.length===0 ? (
           <div style={S.empty}>
             <div style={S.emptyIconWrap}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="var(--teal)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <img src="/logo.png" width="32" height="32" style={{ objectFit: 'cover', borderRadius: 8 }} alt="Yantrik" />
             </div>
             <p style={{fontWeight:700,fontSize:15}}>No workspaces yet</p>
             <p style={{fontSize:13,color:'var(--text-dim)',marginTop:4}}>Create one and start building with AI</p>

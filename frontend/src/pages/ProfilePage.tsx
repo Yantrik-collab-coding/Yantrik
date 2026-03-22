@@ -196,7 +196,7 @@ export default function ProfilePage() {
     <div style={S.root}>
       <div style={S.sidebar}>
         <div style={S.logo}>
-          <span style={{ fontSize: 22, color: 'var(--accent)' }}>⬡</span>
+          <img src="/logo.png" width="28" height="28" style={{ objectFit: 'cover', borderRadius: 7 }} alt="Yantrik" />
           <span style={{ fontWeight: 800, fontSize: 20 }}>Yantrik</span>
         </div>
         <button className="btn btn-ghost" style={{ justifyContent: 'flex-start' }} onClick={() => navigate('/')}>
