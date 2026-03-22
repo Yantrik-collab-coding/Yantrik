@@ -17,7 +17,7 @@ interface AuthStore {
 
 export const useAuthStore = create<AuthStore>(set => ({
   user:    null,
-  token:   localStorage.getItem('hive_token'),
-  setAuth: (user, token) => { localStorage.setItem('hive_token', token); set({ user, token }) },
-  logout:  () => { localStorage.removeItem('hive_token'); set({ user: null, token: null }) },
+  token:   localStorage.getItem('yantrik_token'),
+  setAuth: (user, token) => { localStorage.setItem('yantrik_token', token); set({ user, token }) },
+  logout:  () => { localStorage.removeItem('yantrik_token'); set({ user: null, token: null }) },
 }))

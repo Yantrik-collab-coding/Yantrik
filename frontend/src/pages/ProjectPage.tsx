@@ -101,7 +101,7 @@ export default function ProjectPage() {
     if (!activeFile || !id) return
     const RUNNABLE = ['python', 'javascript', 'bash']
     if (!RUNNABLE.includes(activeFile.language)) {
-      setRunOutput({ stdout: '', stderr: `Cannot run ${activeFile.language} files in the browser.\n\nFull terminal execution is coming in the Hive Desktop App.`, exit_code: 1 })
+      setRunOutput({ stdout: '', stderr: `Cannot run ${activeFile.language} files in the browser.\n\nFull terminal execution is coming in the Yantrik Desktop.`, exit_code: 1 })
       setShowTerminal(true)
       return
     }
@@ -636,7 +636,7 @@ export default function ProjectPage() {
               {!runOutput && !running && (
                 <span style={{ color: '#7d8590' }}>Press ▶ Run to execute the current file.<br />
                   <br />
-                  <span style={{ color: '#f0a500' }}>🖥 Full interactive terminal coming in Hive Desktop App.</span>
+                  <span style={{ color: '#f0a500' }}>🖥 Full interactive terminal coming in Yantrik Desktop.</span>
                 </span>
               )}
               {runOutput && (

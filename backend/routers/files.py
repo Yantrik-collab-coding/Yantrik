@@ -406,7 +406,7 @@ async def run_file(project_id: str, file_id: str, current=Depends(get_current_us
                 "To run this file:\n"
                 "  1. Download it (↓ button in explorer)\n"
                 "  2. Run locally: python todo.py\n\n"
-                "🖥  Full interactive terminal is coming in the Hive Desktop App."
+                "🖥  Full interactive terminal is coming in the Yantrik Desktop."
             ),
             "exit_code": 2,
         }

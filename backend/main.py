@@ -72,9 +72,9 @@ async def global_exception_handler(request: Request, exc: Exception):
 @app.on_event("startup")
 async def startup():
     await init_db()
-    if os.getenv("JWT_SECRET", "hive-secret-change-in-prod") == "hive-secret-change-in-prod":
+    if os.getenv("JWT_SECRET", "yantrik-secret-change-in-prod") == "yantrik-secret-change-in-prod":
         print("⚠️  WARNING: JWT_SECRET is using the default value.")
-    if os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please") == "hive-default-change-in-prod-please":
+    if os.getenv("ENCRYPTION_SECRET", "yantrik-default-change-in-prod-please") == "yantrik-default-change-in-prod-please":
         print("⚠️  WARNING: ENCRYPTION_SECRET is using the default value.")
 
 # ── API Routers (all under /api prefix to match frontend) ────────────────────

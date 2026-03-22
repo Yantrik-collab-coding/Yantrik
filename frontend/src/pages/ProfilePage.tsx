@@ -102,7 +102,7 @@ export default function ProfilePage() {
       // ── Razorpay (India) ─────────────────────────────────────
       new window.Razorpay({
         key: data.key_id, amount: data.amount, currency: data.currency,
-        name: 'Hive', description: data.label, order_id: data.order_id,
+        name: 'Yantrik', description: data.label, order_id: data.order_id,
         handler: async (resp: any) => {
           await api.post('/billing/verify', {
             razorpay_order_id: resp.razorpay_order_id,
@@ -197,7 +197,7 @@ export default function ProfilePage() {
       <div style={S.sidebar}>
         <div style={S.logo}>
           <span style={{ fontSize: 22, color: 'var(--accent)' }}>⬡</span>
-          <span style={{ fontWeight: 800, fontSize: 20 }}>hive</span>
+          <span style={{ fontWeight: 800, fontSize: 20 }}>Yantrik</span>
         </div>
         <button className="btn btn-ghost" style={{ justifyContent: 'flex-start' }} onClick={() => navigate('/')}>
           <ArrowLeft size={15} /> Dashboard

@@ -1,6 +1,6 @@
 """
 diff_engine.py — Unified diff generation + risk scoring
-Adapted from AI-CTO project for Hive's SQLite/aiosqlite stack.
+Adapted from AI-CTO project for Yantrik's SQLite/aiosqlite stack.
 Pure utility — never modifies files, never raises (always returns safe defaults).
 """
 import difflib

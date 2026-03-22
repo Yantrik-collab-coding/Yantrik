@@ -1,5 +1,5 @@
 """
-agent_executor.py — Plan → Execute engine for Hive IDE
+agent_executor.py — Plan → Execute engine for Yantrik IDE
 Routes to any LLM provider via core/llm.py (Groq / OpenAI / Anthropic / Google / Ollama).
 
 Flow:
@@ -20,7 +20,7 @@ VALID_ACTIONS = {"create_file", "modify_file", "explain"}
 MAX_FILE_CHARS = 8000
 
 
-PLAN_SYSTEM = """You are an AI coding agent operating inside a shared team IDE called Hive.
+PLAN_SYSTEM = """You are an AI coding agent operating inside a shared team IDE called Yantrik.
 Given a user instruction and the list of files in the workspace, produce a JSON execution plan.
 
 Rules:

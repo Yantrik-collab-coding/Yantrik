@@ -5,7 +5,7 @@ from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import os
 
-SECRET = os.getenv("JWT_SECRET", "hive-secret-change-in-prod")
+SECRET = os.getenv("JWT_SECRET", "yantrik-secret-change-in-prod")
 ALGORITHM = "HS256"
 bearer = HTTPBearer()
 

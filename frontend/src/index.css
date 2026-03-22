@@ -126,3 +126,52 @@ input, textarea, select { font-family: inherit; }
 .fade-up  { animation: fadeUp  0.25s ease forwards; }
 .live-glow{ animation: glow   2.5s infinite; }
 .spin-slow{ animation: spin   3s linear infinite; }
+
+/* ── Mobile responsive overrides ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Auth page layout - stack vertically on mobile */
+  .auth-layout {
+    flex-direction: column !important;
+    padding: 0 20px 40px !important;
+    gap: 32px !important;
+  }
+  .auth-hero {
+    padding-top: 32px !important;
+  }
+  .auth-hero-title {
+    font-size: 32px !important;
+  }
+  .auth-form-wrap {
+    width: 100% !important;
+    padding-top: 0 !important;
+  }
+  .auth-features {
+    grid-template-columns: 1fr !important;
+  }
+  .auth-stats {
+    flex-wrap: wrap !important;
+    gap: 16px !important;
+  }
+  .auth-nav {
+    padding: 14px 20px !important;
+  }
+
+  /* Dashboard mobile */
+  .dashboard-layout {
+    flex-direction: column !important;
+  }
+
+  /* Project page mobile */
+  .project-layout {
+    flex-direction: column !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-hero-title {
+    font-size: 28px !important;
+  }
+  .auth-logo-name {
+    font-size: 24px !important;
+  }
+}

@@ -178,7 +178,7 @@ async def _call_chat_agent(project_id: str, model: str, username: str, trigger_m
     from core.llm import call_llm
     context = await _get_thread_context(project_id)
     system  = (
-        f"You are an AI agent for {username} in a collaborative team workspace called Hive. "
+        f"You are an AI agent for {username} in a collaborative team workspace called Yantrik. "
         f"You have access to the full conversation thread. Be helpful and concise."
     )
     messages = context + [{"role": "user", "content": trigger_message}]

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import { getAuth, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail as firebaseSendPasswordReset } from 'firebase/auth'
 
 // Replace with your Firebase config from Firebase Console
 // Project Settings → Your apps → Web app → firebaseConfig
@@ -22,6 +22,10 @@ export async function signInWithGoogle(): Promise<string> {
   const result = await signInWithPopup(auth, provider)
   const idToken = await result.user.getIdToken()
   return idToken
+}
+
+export async function sendPasswordResetEmail(email: string): Promise<void> {
+  await firebaseSendPasswordReset(auth, email)
 }
 
 export { auth }

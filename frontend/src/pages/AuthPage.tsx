@@ -21,6 +21,10 @@ export default function AuthPage() {
   const [error, setError]       = useState('')
   const [loading, setLoading]   = useState(false)
   const [gLoading, setGLoading] = useState(false)
+  const [showForgot, setShowForgot] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
+  const [forgotSent, setForgotSent] = useState(false)
+  const [forgotLoading, setForgotLoading] = useState(false)
   const { setAuth } = useAuthStore()
   const navigate    = useNavigate()
 
@@ -52,6 +56,20 @@ export default function AuthPage() {
     } finally { setGLoading(false) }
   }
 
+  async function handleForgotPassword(e: React.FormEvent) {
+    e.preventDefault()
+    setForgotLoading(true)
+    try {
+      const { sendPasswordResetEmail } = await import('../lib/firebase')
+      await sendPasswordResetEmail(forgotEmail)
+      setForgotSent(true)
+    } catch (err: any) {
+      setError(err.message || 'Failed to send reset email')
+    } finally {
+      setForgotLoading(false)
+    }
+  }
+
   return (
     <div style={S.root}>
       {/* Animated grid background */}
@@ -61,7 +79,7 @@ export default function AuthPage() {
       <div style={S.blob2} />
 
       {/* ── Top navbar ────────────────────────────────────────────── */}
-      <nav style={S.nav}>
+      <nav style={S.nav} className="auth-nav">
         <div style={S.navLogo}>
           <div style={S.navLogoIcon}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -79,10 +97,10 @@ export default function AuthPage() {
       </nav>
 
       {/* ── Main layout ───────────────────────────────────────────── */}
-      <div style={S.layout}>
+      <div style={S.layout} className="auth-layout">
 
         {/* ── Left: Hero + features ──────────────────────────────── */}
-        <div style={S.hero}>
+        <div style={S.hero} className="auth-hero">
           {/* Logo */}
           <div style={S.logoWrap}>
             <div style={S.logoIcon}>
@@ -91,13 +109,13 @@ export default function AuthPage() {
               </svg>
             </div>
             <div>
-              <div style={S.logoName}>Yantrik</div>
+              <div style={S.logoName} className="auth-logo-name">Yantrik</div>
               <div style={S.logoTagline}>Collaborative AI Coding for Teams</div>
             </div>
           </div>
 
           {/* Hero text */}
-          <h1 style={S.heroTitle}>
+          <h1 style={S.heroTitle} className="auth-hero-title">
             Build faster with<br />
             <span style={S.heroAccent}>AI teammates</span>
           </h1>
@@ -106,8 +124,8 @@ export default function AuthPage() {
           </p>
 
           {/* Stats */}
-          <div style={S.stats}>
-            {[['Free forever', 'Groq models'], ['₹25/mo', 'GPT-4o, Claude, Gemini'], ['Open source', 'Coming soon']].map(([v, l]) => (
+          <div style={S.stats} className="auth-stats">
+            {[['Free forever', 'Groq models'], ['₹25/mo', 'GPT-4o, Claude, Gemini'], ['Open source', 'MIT licensed']].map(([v, l]) => (
               <div key={v} style={S.stat}>
                 <div style={S.statVal}>{v}</div>
                 <div style={S.statLabel}>{l}</div>
@@ -116,7 +134,7 @@ export default function AuthPage() {
           </div>
 
           {/* Features grid */}
-          <div style={S.features}>
+          <div style={S.features} className="auth-features">
             {FEATURES.map(f => (
               <div key={f.title} style={S.feature}>
                 <div style={S.featureIcon}>{f.icon}</div>
@@ -130,7 +148,7 @@ export default function AuthPage() {
         </div>
 
         {/* ── Right: Auth form ───────────────────────────────────── */}
-        <div style={S.formWrap}>
+        <div style={S.formWrap} className="auth-form-wrap">
           <div style={S.formCard}>
             {/* Tabs */}
             <div style={S.tabs}>
@@ -182,6 +200,12 @@ export default function AuthPage() {
                 <input className="input" type="password" placeholder="••••••••" value={password}
                   onChange={e => setPassword(e.target.value)} required minLength={6} />
               </div>
+              {mode === 'login' && (
+                <button type="button" onClick={() => setShowForgot(true)}
+                  style={{ fontSize: 11, color: 'var(--text-dim)', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'right', fontFamily: 'var(--mono)', padding: 0 }}>
+                  Forgot password?
+                </button>
+              )}
               {error && <p style={{ color: 'var(--red)', fontSize: 12, fontFamily: 'var(--mono)' }}>{error}</p>}
               <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', marginTop: 4 }} disabled={loading}>
                 {loading ? 'Loading...' : mode === 'login' ? 'Sign In' : 'Create Account'}
@@ -201,6 +225,30 @@ export default function AuthPage() {
           </div>
         </div>
       </div>
+
+      {/* Forgot password modal */}
+      {showForgot && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+          <div style={{ background: 'var(--bg1)', border: '1px solid var(--border)', borderRadius: 14, padding: 28, width: '100%', maxWidth: 380 }}>
+            <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Reset Password</h3>
+            {forgotSent ? (
+              <div>
+                <p style={{ color: 'var(--green)', fontSize: 13, marginBottom: 16 }}>✅ Reset email sent! Check your inbox.</p>
+                <button className="btn btn-ghost" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { setShowForgot(false); setForgotSent(false) }}>Close</button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgotPassword} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                <p style={{ fontSize: 13, color: 'var(--text-muted)', marginBottom: 4 }}>Enter your email and we'll send a reset link.</p>
+                <input className="input" type="email" placeholder="you@example.com" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)} required />
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button type="button" className="btn btn-ghost" style={{ flex: 1, justifyContent: 'center' }} onClick={() => setShowForgot(false)}>Cancel</button>
+                  <button className="btn btn-primary" style={{ flex: 1, justifyContent: 'center' }} disabled={forgotLoading}>{forgotLoading ? 'Sending...' : 'Send Reset Link'}</button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }

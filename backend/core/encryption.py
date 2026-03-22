@@ -13,7 +13,7 @@ _fernet_instance: Fernet | None = None
 def _get_fernet() -> Fernet:
     global _fernet_instance
     if _fernet_instance is None:
-        secret = os.getenv("ENCRYPTION_SECRET", "hive-default-change-in-prod-please")
+        secret = os.getenv("ENCRYPTION_SECRET", "yantrik-default-change-in-prod-please")
         key = hashlib.sha256(secret.encode()).digest()
         fernet_key = base64.urlsafe_b64encode(key)
         _fernet_instance = Fernet(fernet_key)
