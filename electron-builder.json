@@ -1,0 +1,69 @@
+{
+  "appId": "fun.yantrik.desktop",
+  "productName": "Yantrik",
+  "directories": {
+    "output": "dist-electron",
+    "buildResources": "public"
+  },
+  "npmRebuild": false,
+  "files": [
+    "electron/**/*",
+    "frontend/dist/**/*"
+  ],
+  "extraResources": [
+    {
+      "from": "backend",
+      "to": "backend",
+      "filter": [
+        "**/*.py",
+        "requirements.txt",
+        "*.json",
+        "!**/__pycache__/**",
+        "!**/*.pyc",
+        "!hive.db"
+      ]
+    }
+  ],
+  "win": {
+    "target": [{ "target": "nsis", "arch": ["x64"] }],
+    "icon": "public/logo.ico",
+    "requestedExecutionLevel": "asInvoker"
+  },
+  "mac": {
+    "target": [
+      { "target": "dmg",  "arch": ["x64", "arm64"] },
+      { "target": "zip",  "arch": ["x64", "arm64"] }
+    ],
+    "icon": "public/logo.icns",
+    "category": "public.app-category.developer-tools",
+    "darkModeSupport": true,
+    "hardenedRuntime": true,
+    "gatekeeperAssess": false,
+    "entitlements": "electron/entitlements.mac.plist",
+    "entitlementsInherit": "electron/entitlements.mac.plist"
+  },
+  "linux": {
+    "target": [
+      { "target": "AppImage", "arch": ["x64"] },
+      { "target": "deb",      "arch": ["x64"] }
+    ],
+    "icon": "public/logo.png",
+    "category": "Development",
+    "synopsis": "Collaborative AI Coding for Teams"
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "Yantrik"
+  },
+  "dmg": {
+    "contents": [
+      { "x": 130, "y": 220 },
+      { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+    ]
+  },
+  "publish": null
+}
