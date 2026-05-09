@@ -1,0 +1,90 @@
+{
+  "name": "yantrik-desktop",
+  "version": "1.0.0",
+  "description": "Yantrik \u2014 Collaborative AI Coding for Teams",
+  "main": "electron/main.js",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:electron\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:electron": "wait-on http://localhost:3000 && cross-env NODE_ENV=development electron .",
+    "build": "npm run build:frontend && npm run build:electron",
+    "build:frontend": "cd frontend && npm run build",
+    "build:electron": "electron-builder --config electron-builder.json",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "node-pty": "^1.0.0",
+    "chokidar": "^3.5.3"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "cross-env": "^10.1.0",
+    "electron": "^31.0.0",
+    "electron-builder": "^25.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "fun.yantrik.desktop",
+    "productName": "Yantrik",
+    "copyright": "Copyright \u00a9 2025 Yantrik",
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "!frontend/src",
+      "!frontend/node_modules"
+    ],
+    "extraResources": [
+      {
+        "from": "backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!__pycache__",
+          "!*.pyc",
+          "!*.db"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/logo.ico"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "public/logo.icns",
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "public/logo.png",
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
